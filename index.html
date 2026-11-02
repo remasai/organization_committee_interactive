@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مهمة أسطورية | أنقذ الفعالية!</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&display=swap">
+<style>
+:root{--navy:#142849;--beige:#F3E7D4;--sky:#C9DDEC;--white:#fff;--gold:#E8C57C;--ok:#2f9e6e;--bad:#c4503f;
+--f:'Cairo','Tajawal','Segoe UI',Tahoma,Arial,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{font-family:var(--f);color:var(--navy);background:var(--navy);overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+#bg{position:fixed;inset:0;z-index:0;transition:background .8s;background:radial-gradient(circle at 50% 0,#27457a,var(--navy) 70%)}
+#bg.s0{background:radial-gradient(circle at 50% 0,#27457a,var(--navy) 70%)}
+#bg.s1{background:linear-gradient(180deg,#1b3563 0%,#142849 55%,#3a2f55 100%)}
+#bg.s2{background:linear-gradient(180deg,#0f2036 0%,#16365a 60%,#0c1a2e 100%)}
+#bg.s3{background:linear-gradient(180deg,#2b3a57,#142849 70%)}
+#bg i{position:absolute;color:var(--gold);opacity:.35;font-style:normal;animation:tw 4s ease-in-out infinite}
+@keyframes tw{50%{opacity:.08;transform:scale(.7)}}
+#bg .stage{position:absolute;bottom:0;left:0;right:0;height:22vh;opacity:.18;font-size:11vh;display:flex;justify-content:space-around;align-items:flex-end;padding-bottom:1vh}
+#app{position:relative;z-index:1;min-height:100vh;max-width:920px;margin:0 auto;padding:16px 16px 28px;display:flex;flex-direction:column}
+.screen{display:none;flex:1;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:14px}
+.screen.on{display:flex;animation:pop .5s cubic-bezier(.2,1.3,.4,1)}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}}
+.crown{width:110px;filter:drop-shadow(0 6px 14px #0006);animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-3deg)}}
+.brand{color:var(--gold);font-weight:700;letter-spacing:.05em;font-size:1.1rem;border:2px solid var(--gold);padding:2px 16px;border-radius:99px}
+h1{color:var(--white);font-weight:900;font-size:clamp(2.6rem,9vw,5rem);line-height:1.15;text-shadow:0 4px 0 #0005}
+h2.sub{color:var(--gold);font-weight:900;font-size:clamp(1.6rem,5vw,2.6rem)}
+.lead{color:var(--sky);font-size:clamp(1.05rem,2.6vw,1.35rem);max-width:640px;line-height:1.9}
+.chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.chip{background:var(--beige);border-radius:99px;padding:6px 18px;font-weight:700}
+.btn{font-family:var(--f);font-weight:900;font-size:clamp(1.25rem,3.5vw,1.7rem);padding:14px 44px;border:0;border-radius:99px;background:var(--gold);color:var(--navy);cursor:pointer;box-shadow:0 8px 0 #b8934a,0 14px 24px #0005;transition:transform .15s,box-shadow .15s;min-height:56px}
+.btn:hover{transform:translateY(-3px)}
+.btn:active{transform:translateY(5px);box-shadow:0 3px 0 #b8934a}
+.btn.alt{background:var(--sky);box-shadow:0 8px 0 #8aa9c2,0 14px 24px #0005;font-size:1.1rem;padding:10px 28px}
+.btn:focus-visible,.opt:focus-visible,#mute:focus-visible{outline:4px solid var(--white);outline-offset:3px}
+.pulse{animation:pl 1.8s infinite}
+@keyframes pl{50%{transform:scale(1.05)}}
+/* HUD */
+#hud{display:none;align-items:center;gap:12px;margin-bottom:8px}
+#hud.on{display:flex}
+#bars{flex:1;display:flex;gap:6px}
+#bars b{flex:1;height:14px;border-radius:9px;background:#ffffff26;overflow:hidden;position:relative}
+#bars b::after{content:"";position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .6s}
+#bars b.done::after{transform:scaleX(1)}
+#bars b.cur::after{transform:scaleX(.35);background:var(--sky)}
+#score{background:var(--beige);border-radius:99px;padding:4px 16px;font-weight:900;white-space:nowrap}
+#mute{background:var(--beige);border:0;border-radius:50%;width:44px;height:44px;font-size:1.3rem;cursor:pointer}
+/* Game */
+.stagehead{display:flex;align-items:center;gap:10px;color:var(--white);font-weight:700;font-size:1.15rem}
+.tag{background:var(--gold);color:var(--navy);padding:3px 16px;border-radius:99px;font-weight:900}
+.scene{width:100%;background:var(--beige);border-radius:28px;padding:18px 20px;display:flex;gap:16px;align-items:center;box-shadow:0 10px 0 #0003,0 18px 34px #0006;text-align:right}
+.mascot{width:96px;flex:none;animation:bob 3s ease-in-out infinite}
+.alert{display:inline-block;background:var(--bad);color:#fff;font-weight:900;border-radius:99px;padding:2px 14px;margin-bottom:6px;font-size:.95rem;animation:pl 1s infinite}
+.scene p{font-size:clamp(1.15rem,3vw,1.55rem);font-weight:700;line-height:1.8}
+#opts{width:100%;display:grid;gap:12px}
+.opt{font-family:var(--f);display:flex;gap:14px;align-items:center;text-align:right;width:100%;background:var(--white);color:var(--navy);border:3px solid transparent;border-radius:24px;padding:14px 18px;font-size:clamp(1.05rem,2.6vw,1.3rem);font-weight:700;line-height:1.7;cursor:pointer;box-shadow:0 6px 0 #0003;transition:transform .15s,background .2s,border-color .2s;min-height:68px}
+.opt:hover:not(:disabled){transform:translateY(-4px);border-color:var(--gold);background:#fffaf0}
+.opt .l{flex:none;width:42px;height:42px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:900}
+.opt:disabled{cursor:default}
+.opt.right{background:#dcf5e8;border-color:var(--ok);animation:ok .6s}
+.opt.wrong{background:#fbe1dc;border-color:var(--bad);animation:shake .45s}
+.opt.dim{opacity:.55}
+@keyframes ok{40%{transform:scale(1.04)}}
+@keyframes shake{25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
+#fb{width:100%;display:none;background:var(--sky);border-radius:24px;padding:14px 20px;text-align:right;position:relative}
+#fb.on{display:block;animation:pop .4s}
+#fb h3{font-size:1.4rem;font-weight:900}
+#fb p{line-height:1.8;font-weight:500;font-size:1.1rem}
+#fb .why{margin-top:6px;font-weight:700}
+#plus{position:absolute;left:18px;top:-22px;background:var(--gold);color:var(--navy);font-weight:900;font-size:1.5rem;border-radius:99px;padding:2px 16px;animation:up 1.6s forwards}
+@keyframes up{0%{transform:translateY(20px) scale(.5);opacity:0}25%{opacity:1;transform:scale(1.2)}100%{transform:translateY(-26px);opacity:1}}
+#next{display:none;margin-top:4px}
+/* Transition */
+#ov{position:fixed;inset:0;z-index:20;display:none;place-items:center;background:#142849e6;color:var(--gold);font-weight:900;font-size:clamp(1.8rem,7vw,3.4rem);text-align:center;padding:20px}
+#ov.on{display:grid;animation:pop .4s}
+/* Result */
+.card{background:var(--beige);border:6px solid var(--gold);border-radius:34px;padding:26px 22px;width:min(100%,520px);box-shadow:0 12px 0 #0003,0 22px 40px #0007;position:relative}
+.card .crown{width:130px;margin-top:-80px}
+.card .brand{color:var(--navy);border-color:var(--navy);display:inline-block;margin:4px 0}
+.card .big{font-size:clamp(3.6rem,13vw,5.6rem);font-weight:900;line-height:1}
+.card .big small{font-size:.35em;color:#142849aa}
+.card .title{font-size:clamp(1.8rem,6vw,2.5rem);font-weight:900;margin:8px 0}
+.card .msg{font-size:1.15rem;line-height:1.8;font-weight:500}
+.card .stars{font-size:2rem;letter-spacing:.3em;margin-top:6px}
+.row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+#cf{position:fixed;inset:0;pointer-events:none;z-index:30;width:100%;height:100%}
+@media (max-width:560px){.scene{flex-direction:column;text-align:center}.mascot{width:78px}.btn{padding:12px 30px}}
+@media (min-width:900px){#opts{grid-template-columns:1fr}.scene{padding:24px 30px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="bg" class="s0" aria-hidden="true"></div>
+<canvas id="cf" aria-hidden="true"></canvas>
+<div id="ov" role="status"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<symbol id="crown" viewBox="0 0 120 90"><path d="M8 78 L2 22 L36 48 L60 8 L84 48 L118 22 L112 78Z" fill="#E8C57C" stroke="#b8934a" stroke-width="4" stroke-linejoin="round"/><rect x="8" y="70" width="104" height="14" rx="6" fill="#d9ad57" stroke="#b8934a" stroke-width="3"/><circle cx="60" cy="52" r="7" fill="#C9DDEC"/><circle cx="30" cy="60" r="4" fill="#fff"/><circle cx="90" cy="60" r="4" fill="#fff"/></symbol>
+<symbol id="mascot" viewBox="0 0 100 120"><rect x="22" y="76" width="56" height="40" rx="18" fill="#142849"/><path d="M42 76 L50 92 L58 76Z" fill="#fff"/><circle cx="50" cy="50" r="30" fill="#fbd9b0" stroke="#142849" stroke-width="3"/><path d="M20 46 Q50 6 80 46 Q70 28 50 28 Q30 28 20 46Z" fill="#142849"/><use href="#crown" x="30" y="2" width="40" height="30"/><circle cx="39" cy="52" r="4.5" fill="#142849"/><circle cx="61" cy="52" r="4.5" fill="#142849"/><circle cx="40.5" cy="50.5" r="1.4" fill="#fff"/><circle cx="62.5" cy="50.5" r="1.4" fill="#fff"/><path d="M38 64 Q50 76 62 64" fill="none" stroke="#142849" stroke-width="3.5" stroke-linecap="round"/><circle cx="31" cy="62" r="5" fill="#f4a79a" opacity=".6"/><circle cx="69" cy="62" r="5" fill="#f4a79a" opacity=".6"/><path d="M16 56 Q16 80 36 80" fill="none" stroke="#C9DDEC" stroke-width="4" stroke-linecap="round"/><rect x="11" y="46" width="9" height="18" rx="4" fill="#C9DDEC"/></symbol>
+</defs>
+</svg>
+
+<main id="app">
+  <div id="hud">
+    <div id="bars" aria-label="التقدم"><b></b><b></b><b></b></div>
+    <div id="score">⭐ <span id="sc">0</span> / 300</div>
+    <button id="mute" aria-label="كتم الصوت" title="كتم / تشغيل الصوت">🔊</button>
+  </div>
+
+  <section id="welcome" class="screen on">
+    <svg class="crown" viewBox="0 0 120 90"><use href="#crown"/></svg>
+    <div class="brand">لجنة الأساطير</div>
+    <h1>مهمة أسطورية 👑</h1>
+    <h2 class="sub">أنقذ الفعالية!</h2>
+    <p class="lead">تخيّل إنك مسؤول تنظيم، وفجأة تبدأ المشاكل قبل الفعالية! عندك 3 مهام، وكل قرار تتخذه يحدد إذا بتصير من أساطير التنظيم أو لا!</p>
+    <div class="chips"><span class="chip">🎯 3 مراحل</span><span class="chip">⏱️ دقيقتان</span><span class="chip">⭐ 300 نقطة</span></div>
+    <button class="btn pulse" id="start">ابدأ التحدي 🚀</button>
+  </section>
+
+  <section id="game" class="screen">
+    <div class="stagehead"><span class="tag" id="gtag"></span><span id="gname"></span></div>
+    <div class="scene"><svg class="mascot" viewBox="0 0 100 120"><use href="#mascot"/></svg><div><span class="alert" id="gal"></span><p id="gq"></p></div></div>
+    <div id="opts"></div>
+    <div id="fb" aria-live="polite"><span id="plus"></span><h3 id="fbt"></h3><p id="fbm"></p><p class="why" id="fbw"></p></div>
+    <button class="btn" id="next">المرحلة التالية</button>
+  </section>
+
+  <section id="result" class="screen">
+    <div class="card" id="rcard">
+      <svg class="crown" viewBox="0 0 120 90"><use href="#crown"/></svg><br>
+      <div class="brand">لجنة الأساطير</div>
+      <div class="big"><span id="rs">0</span><small> / 300</small></div>
+      <div class="title" id="rt"></div>
+      <p class="msg" id="rm"></p>
+      <div class="stars" id="rst"></div>
+    </div>
+    <div class="row"><button class="btn" id="again">العب من جديد 🔄</button><button class="btn alt" id="dl">حمّل البطاقة 📥</button></div>
+  </section>
+</main>
+
+<script>
+(function(){
+// ===== المحتوى: عدّل هنا لإضافة أسئلة أو تغيير النصوص =====
+var STAGES=[
+ {tag:'المرحلة الأولى',name:'الفعاليات الحضورية',alert:'🚨 أزمة قبل البداية! — باقي 10 دقائق',bg:'s1',scene:'🏛️🪑🎤🪑🏛️',
+  q:'باقي 10 دقائق على بداية الفعالية، وفجأة وصل الضيوف بدري وفريق الاستقبال ناقص! وش أول تصرف بتسويه؟',
+  o:['أنتظر باقي الفريق لين يوصل.','أبلغ المسؤول، وأستقبل الضيوف، وأساعد بإعادة توزيع المهام.','أطلب من الضيوف يرجعون بعدين.'],
+  c:1,ok:['قرار أسطوري! 👑','تصرفك السريع وتواصلك مع الفريق أنقذ بداية الفعالية!'],
+  why:'الاستقبال الفوري مع إبلاغ المسؤول وإعادة توزيع المهام يحفظ انطباع الضيوف ويسد النقص.',
+  no:['قرار يحتاج مراجعة','الانتظار أو تأجيل الضيوف يضيّع الوقت ويعطي انطباعًا سيئًا عن الفعالية.'],saved:'تم إنقاذ المرحلة الأولى! 🎉'},
+ {tag:'المرحلة الثانية',name:'الفعاليات الأونلاين',alert:'💻 اللقاء في خطر!',bg:'s2',scene:'💻🎧📡🎧💻',
+  q:'بدأ اللقاء الأونلاين، لكن صوت المتحدث اختفى فجأة والحضور ينتظرون! وش بتسوي؟',
+  o:['أنهي اللقاء مباشرة.','أتجاهل المشكلة وأنتظر.','أتواصل مع المتحدث، وأتحقق من إعدادات الصوت، وأنسق مع المسؤول لحل المشكلة.'],
+  c:2,ok:['مبدع! 🎧','قدرت تتعامل مع المشكلة التقنية وتحافظ على سير اللقاء!'],
+  why:'التواصل مع المتحدث وفحص الإعدادات والتنسيق مع المسؤول هو الطريق الأسرع لحل المشكلة.',
+  no:['قرار يحتاج مراجعة','إنهاء اللقاء أو تجاهل المشكلة يترك الحضور بلا حل. الأفضل التواصل وفحص الإعدادات والتنسيق.'],saved:'تم إنقاذ المرحلة الثانية! 🎉'},
+ {tag:'المرحلة الثالثة',name:'الاستبيانات والأرشفة',alert:'📋 المهمة الأخيرة!',bg:'s3',scene:'📁🗂️📊🗂️📁',
+  q:'انتهت الفعالية بنجاح، لكن باقي نعرف آراء الحضور ونحفظ توثيق الفعالية. وش الخطوة الأفضل؟',
+  o:['أنشئ استبيانًا للحضور، وأجمع النتائج، وأنظم ملفات وصور الفعالية في الأرشيف.','أحذف الملفات لأن الفعالية انتهت.','أكتفي بصور عشوائية بدون تنظيم.'],
+  c:0,ok:['رهيب! 📁','ما اكتفيت بنجاح الفعالية، بل ساعدت بتوثيقها وتحسين الفعاليات القادمة!'],
+  why:'الاستبيان يكشف آراء الحضور، والأرشفة المنظمة تحفظ التوثيق وتحسّن الفعاليات القادمة.',
+  no:['قرار يحتاج مراجعة','حذف الملفات أو تركها دون تنظيم يضيّع التوثيق وفرص التطوير.'],saved:'اكتملت المهمة الأخيرة! 🎉'}
+];
+var RANKS={300:{t:'👑 أسطورة التنظيم',m:'ما شاء الله! أنت جاهز تقود الفعاليات وتتعامل مع أصعب المواقف!',s:'★★★'},
+ 200:{t:'🌟 نجم التنظيم',m:'ممتاز! عندك مهارات تنظيمية قوية، وباقي خطوة وتصير أسطورة!',s:'★★☆'},
+ 100:{t:'🚀 منظّم واعد',m:'بداية جميلة! عندك روح المنظّم، ومع التجربة بتصير أفضل!',s:'★☆☆'},
+ 0:{t:'💙 أسطورة تحت التدريب',m:'كل أسطورة بدأت من مكان! جرّب مرة ثانية واكتشف أسرار التنظيم.',s:'☆☆☆'}};
+var PTS=100;
+// ===== الحالة =====
+var $=function(id){return document.getElementById(id)};
+var st=0,score=0,locked=false,muted=false,ac=null;
+function show(id){['welcome','game','result'].forEach(function(s){$(s).classList.toggle('on',s===id)});$('hud').classList.toggle('on',id!=='welcome');window.scrollTo(0,0)}
+// ===== الخلفية =====
+(function(){var b=$('bg'),h='';for(var i=0;i<18;i++){h+='<i style="top:'+Math.random()*80+'%;right:'+Math.random()*96+'%;font-size:'+(10+Math.random()*18)+'px;animation-delay:'+Math.random()*4+'s">'+(i%3?'✦':'★')+'</i>'}
+ h+='<div class="stage" id="stg"></div>';b.innerHTML=h})();
+function setBg(c,scene){$('bg').className=c;$('stg').innerHTML=scene.split('').length?Array.from(scene).map(function(e){return '<span>'+e+'</span>'}).join(''):''}
+// ===== الصوت =====
+function tone(f,d,t,v){if(muted)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();var o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.value=v||.08;o.connect(g);g.connect(ac.destination);var n=ac.currentTime;g.gain.exponentialRampToValueAtTime(.001,n+d);o.start(n);o.stop(n+d)}catch(e){}}
+function sfx(k){if(k==='ok'){[523,659,784,1047].forEach(function(f,i){setTimeout(function(){tone(f,.22)},i*90)})}else if(k==='no'){tone(220,.3,'sawtooth',.05);setTimeout(function(){tone(165,.35,'sawtooth',.05)},140)}else tone(600,.08,'triangle')}
+$('mute').onclick=function(){muted=!muted;this.textContent=muted?'🔇':'🔊'};
+// ===== اللعبة =====
+function bars(){Array.prototype.forEach.call($('bars').children,function(b,i){b.className=i<st?'done':(i===st?'cur':'')})}
+function render(){
+ var s=STAGES[st];locked=false;bars();setBg(s.bg,s.scene);
+ $('gtag').textContent=s.tag;$('gname').textContent='القسم: '+s.name;$('gal').textContent=s.alert;$('gq').textContent=s.q;
+ var L=['A','B','C'],h='';
+ s.o.forEach(function(t,i){h+='<button class="opt" data-i="'+i+'"><span class="l">'+L[i]+'</span><span>'+t+'</span></button>'});
+ $('opts').innerHTML=h;$('fb').classList.remove('on');$('next').style.display='none';
+ $('next').textContent=st===STAGES.length-1?'اعرض نتيجتي 🏆':'المرحلة التالية';
+ show('game');
+}
+$('opts').addEventListener('click',function(e){
+ var b=e.target.closest('.opt');if(!b||locked)return;locked=true;
+ var s=STAGES[st],i=+b.dataset.i,good=i===s.c;
+ Array.prototype.forEach.call($('opts').children,function(x,k){x.disabled=true;if(k===s.c)x.classList.add('right');else if(k===i)x.classList.add('wrong');else x.classList.add('dim')});
+ if(good){score+=PTS;$('sc').textContent=score;sfx('ok');burst(40)}else sfx('no');
+ var m=good?s.ok:s.no;$('fbt').textContent=m[0];$('fbm').textContent=m[1];
+ $('fbw').textContent='✅ الإجابة الصحيحة: '+['A','B','C'][s.c]+' — '+s.why;
+ var p=$('plus');p.textContent=good?'+'+PTS:'+0';p.style.animation='none';void p.offsetWidth;p.style.animation='';
+ $('fb').classList.add('on');$('next').style.display='inline-block';
+ setTimeout(function(){$('next').scrollIntoView({behavior:'smooth',block:'nearest'})},200);
+});
+$('next').onclick=function(){
+ sfx('tap');var s=STAGES[st];st++;bars();
+ var ov=$('ov');ov.textContent=s.saved;ov.classList.add('on');
+ setTimeout(function(){ov.classList.remove('on');st>=STAGES.length?finish():render()},1100);
+};
+function finish(){
+ var r=RANKS[score];$('rs').textContent=score;$('rt').textContent=r.t;$('rm').textContent=r.m;$('rst').textContent=r.s;
+ setBg('s0','👑⭐🏆⭐👑');bars();show('result');
+ if(score>0){sfx('ok');burst(score>=300?220:score>=200?140:80)}else sfx('no');
+}
+$('start').onclick=function(){sfx('tap');st=0;score=0;$('sc').textContent=0;render()};
+$('again').onclick=function(){sfx('tap');st=0;score=0;$('sc').textContent=0;setBg('s0','');show('welcome')};
+// ===== Confetti =====
+var cv=$('cf'),cx=cv.getContext('2d'),P=[],run=false,cols=['#E8C57C','#C9DDEC','#F3E7D4','#fff','#E8C57C'];
+function size(){cv.width=innerWidth;cv.height=innerHeight}size();addEventListener('resize',size);
+function burst(n){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;for(var i=0;i<n;i++)P.push({x:innerWidth/2+(Math.random()-.5)*200,y:innerHeight*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*13-3,r:Math.random()*6,w:5+Math.random()*7,h:3+Math.random()*5,c:cols[i%cols.length],l:120+Math.random()*60});if(!run){run=true;requestAnimationFrame(tick)}}
+function tick(){cx.clearRect(0,0,cv.width,cv.height);P=P.filter(function(p){return p.l>0&&p.y<cv.height+20});P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.vx*=.99;p.r+=.2;p.l--;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.globalAlpha=Math.min(1,p.l/40);cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()});if(P.length)requestAnimationFrame(tick);else{run=false;cx.clearRect(0,0,cv.width,cv.height)}}
+// ===== تحميل البطاقة PNG =====
+function wrap(c,t,w){var ws=t.split(' '),ls=[],l='';ws.forEach(function(x){var n=l?l+' '+x:x;if(c.measureText(n).width>w&&l){ls.push(l);l=x}else l=n});ls.push(l);return ls}
+$('dl').onclick=function(){
+ var r=RANKS[score],W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;var x=c.getContext('2d');
+ var F="Cairo,Tajawal,'Segoe UI',Tahoma,Arial,sans-serif";x.direction='rtl';x.textAlign='center';
+ var g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#27457a');g.addColorStop(1,'#142849');x.fillStyle=g;x.fillRect(0,0,W,H);
+ x.fillStyle='#E8C57C';for(var i=0;i<40;i++){x.globalAlpha=.15+Math.random()*.3;x.font='24px '+F;x.fillText('✦',Math.random()*W,Math.random()*H)}x.globalAlpha=1;
+ function rr(a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+ rr(90,170,900,1010,60);x.fillStyle='#F3E7D4';x.fill();x.lineWidth=14;x.strokeStyle='#E8C57C';x.stroke();
+ x.font='900 150px '+F;x.fillStyle='#142849';x.fillText('👑',W/2,300);
+ x.font='700 44px '+F;x.fillText('لجنة الأساطير',W/2,400);
+ x.font='900 64px '+F;x.fillText('مهمة أسطورية',W/2,490);
+ x.font='900 230px '+F;x.fillText(String(score),W/2,720);
+ x.font='700 52px '+F;x.fillStyle='#14284999';x.fillText('من 300 نقطة',W/2,800);
+ x.font='900 76px '+F;x.fillStyle='#142849';x.fillText(r.t,W/2,935);
+ x.font='500 46px '+F;var ls=wrap(x,r.m,760);ls.forEach(function(l,i){x.fillText(l,W/2,1020+i*70)});
+ x.font='700 40px '+F;x.fillStyle='#F3E7D4';x.fillText('هل تقدر تسجّل 300؟ جرّب مهمتك في ركن اللجنة التنظيمية',W/2,1270);
+ var a=document.createElement('a');a.download='بطاقة-مهمة-أسطورية.png';a.href=c.toDataURL('image/png');document.body.appendChild(a);a.click();a.remove();
+};
+setBg('s0','');
+})();
+</script>
+</body>
+</html>
